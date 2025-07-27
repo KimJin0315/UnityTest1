@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56f666174419b84194bb7f041a72c92, type: 3}
+  m_Name: Enbony House
+  m_EditorClassIdentifier: 
+  buildingName: Enbony House
+  width: 8
+  height: 8
+  resourceCosts:
+  - resourceName: Enbony
+    amount: 40
+  prefab: {fileID: 4506874536743057727, guid: 85a8a813679da68478ebb2a18b41b476, type: 3}
+  previewPrefab: {fileID: 4506874536743057727, guid: 46129769b9dcd074899820de28ade64d,
+    type: 3}
+  nextUnlock: {fileID: 11400000, guid: 7b1d96181c28eb245a307cd936f13945, type: 2}
+  icon: {fileID: -2869476095536097306, guid: 93cae14106dee114b8d0d27808b5375a, type: 3}

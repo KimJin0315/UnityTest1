@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56f666174419b84194bb7f041a72c92, type: 3}
+  m_Name: Bamboo House
+  m_EditorClassIdentifier: 
+  buildingName: Bamboo House
+  width: 8
+  height: 8
+  resourceCosts:
+  - resourceName: Bamboo
+    amount: 40
+  prefab: {fileID: 819019779479043176, guid: 78426564cd6d82c41ab9d07e8b03ad7a, type: 3}
+  previewPrefab: {fileID: 819019779479043176, guid: e29cc03cbb7e438409b08a6885076849,
+    type: 3}
+  nextUnlock: {fileID: 11400000, guid: f1063688c78d8fa45909fa7717fec359, type: 2}
+  icon: {fileID: 7725415702801208186, guid: 988119bf7f6b47e4691a958a11ac2086, type: 3}
