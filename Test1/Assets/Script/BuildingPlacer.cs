@@ -10,7 +10,7 @@ public class BuildingPlacer : MonoBehaviour
     private GameObject previewObject;
     private BuildingData currentBuilding;
     private bool isPlacing = false;
-    private bool isFlipped = false;
+    private bool isFlipped = false;   // ✅ 좌우 반전 상태 저장
 
     void Update()
     {
@@ -27,6 +27,15 @@ public class BuildingPlacer : MonoBehaviour
             worldPos.y = Mathf.Round(worldPos.y / gridSize) * gridSize;
 
             previewObject.transform.position = worldPos;
+
+            // ✅ ✅ ✅ 🔥 R 키로 좌우 반전
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                isFlipped = !isFlipped;
+                Vector3 scale = previewObject.transform.localScale;
+                scale.x *= -1;
+                previewObject.transform.localScale = scale;
+            }
 
             // ✅ Collider 크기 체크 (SpriteRenderer + Scale 반영)
             Vector2 checkSize = Vector2.one;
@@ -92,7 +101,6 @@ public class BuildingPlacer : MonoBehaviour
         SetPreviewMode(previewObject);
     }
 
-
     // ✅ 실제 건물 설치
     void PlaceBuilding(Vector3 position)
     {
@@ -117,22 +125,20 @@ public class BuildingPlacer : MonoBehaviour
 
         // ✅ 3) 건물 설치
         GameObject newBuilding = Instantiate(currentBuilding.prefab, position, Quaternion.identity);
+
+        // ✅ ✅ ✅ ★ 여기서 프리뷰 Scale 그대로 적용
         newBuilding.transform.localScale = previewObject.transform.localScale;
 
+        // ✅ Collider 원상 복구
         foreach (Collider2D col in newBuilding.GetComponentsInChildren<Collider2D>())
         {
             col.isTrigger = false;
         }
 
-        foreach (SpriteRenderer sr in newBuilding.GetComponentsInChildren<SpriteRenderer>())
-        {
-            sr.flipX = isFlipped;
-        }
-
-        // ✅ 4) Building 레이어 적용
+        // ✅ Building 레이어 적용
         newBuilding.layer = LayerMask.NameToLayer("Building");
 
-        // ✅ 5) 다음 건물 해금
+        // ✅ 다음 건물 해금
         if (currentBuilding.nextUnlock != null)
         {
             FindFirstObjectByType<BuildingUIManager>().UnlockBuilding(currentBuilding.nextUnlock);
