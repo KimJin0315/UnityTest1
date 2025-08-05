@@ -9,7 +9,6 @@ namespace Cainos.PixelArtTopDown_Basic
         public float speed;
         private Animator animator;
         private Rigidbody2D rb;
-        public GameObject BuildingPanel;
 
         private void Start()
         {
@@ -40,10 +39,6 @@ namespace Cainos.PixelArtTopDown_Basic
             {
                 dir.y = -1;
                 animator.SetInteger("Direction", 0);
-            }
-            else if (Input.GetKeyDown(KeyCode.B))
-            {
-                BuildingPanel.SetActive(!BuildingPanel.activeSelf);
             }
 
             dir.Normalize();

@@ -145,6 +145,32 @@ public class BuildingPlacer : MonoBehaviour
         }
 
         CancelPlacement();
+
+        switch (currentBuilding.unlockType)
+        {
+            case UnlockType.CraftingTable:
+                FindFirstObjectByType<ContentUnlockManager>().EnableCraftingTab("CraftingTable");
+                break;
+            case UnlockType.Furnace:
+                FindFirstObjectByType<ContentUnlockManager>().EnableCraftingTab("Furnace");
+                break;
+            case UnlockType.Ship:
+                FindFirstObjectByType<ContentUnlockManager>().EnableCraftingTab("Ship");
+                break;
+            case UnlockType.Fishing:
+                UnityEngine.Debug.Log("🎣 낚시 콘텐츠 해금!");
+                FindFirstObjectByType<ContentUnlockManager>().ShowFishingIcon();
+                break;
+            case UnlockType.Farming:
+                FindFirstObjectByType<ContentUnlockManager>().ShowFarmingIcon();
+                break;
+            case UnlockType.Mining:
+                FindFirstObjectByType<ContentUnlockManager>().ShowMiningIcon();
+                break;
+        }
+
+
+
     }
 
 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 988119bf7f6b47e4691a958a11ac2086
+guid: 26db8545da79a7e488c6b2ec6aa4226e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7725415702801208186
-    second: Bamboo House_0
+      213: -4548796474974412338
+    second: Boat_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bamboo House_0
+      name: Boat_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 1
-        width: 1017
-        height: 1020
+        x: 54
+        y: 165
+        width: 925
+        height: 693
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a73d0b396a0363b60800000000000000
-      internalID: 7725415702801208186
+      spriteID: ec1e991e4bd6fd0c0800000000000000
+      internalID: -4548796474974412338
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 4e305757e8e7d2246a30c7d6d0980b08
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bamboo House_0: 7725415702801208186
+      Boat_0: -4548796474974412338
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

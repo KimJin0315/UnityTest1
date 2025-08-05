@@ -8,6 +8,18 @@ public struct ResourceCost
     public int amount;
 }
 
+public enum UnlockType
+{
+    None,
+    CraftingTable,
+    Furnace,
+    Ship,
+    Fishing,
+    Farming,
+    Mining
+}
+
+
 [CreateAssetMenu(fileName = "NewBuildingData", menuName = "Building/BuildingData")]
 public class BuildingData : ScriptableObject
 {
@@ -20,4 +32,6 @@ public class BuildingData : ScriptableObject
     public GameObject previewPrefab;
     public BuildingData nextUnlock;
     public Sprite icon;
+
+    public UnlockType unlockType;
 }
