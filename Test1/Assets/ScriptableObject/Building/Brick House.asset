@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Brick House
   m_EditorClassIdentifier: 
   buildingName: Brick House
+  icon: {fileID: -5844298799890164304, guid: 57a119ba233d1964ead421f27d14d180, type: 3}
+  prefab: {fileID: 1838139343962655972, guid: dd71bff93bd2d2340af3f9fecbe8ef39, type: 3}
+  previewPrefab: {fileID: 1838139343962655972, guid: 84059539d45fe334e91716464a141e9c,
+    type: 3}
   width: 10
   height: 10
   resourceCosts:
@@ -20,8 +24,5 @@ MonoBehaviour:
     amount: 40
   - resourceName: Cement
     amount: 10
-  prefab: {fileID: 1838139343962655972, guid: dd71bff93bd2d2340af3f9fecbe8ef39, type: 3}
-  previewPrefab: {fileID: 1838139343962655972, guid: 84059539d45fe334e91716464a141e9c,
-    type: 3}
-  nextUnlock: {fileID: 0}
-  icon: {fileID: -5844298799890164304, guid: 57a119ba233d1964ead421f27d14d180, type: 3}
+  unlockType: 6
+  nextUnlocks: []

@@ -2,21 +2,31 @@ using UnityEngine;
 
 public class BuildingUIController : MonoBehaviour
 {
-    public GameObject uiRootPanel;          // 전체 UI 묶음 패널 (BuildingPanel + CraftingPanel 포함)
-    public PanelSwitcher panelSwitcher;     // 탭 전환 스크립트
+    public GameObject uiRootPanel;   // 상단 전체 UI
+    public GameObject iconPanel;     // 오른쪽 하단 Icon
+    public PanelSwitcher panelSwitcher;
 
     private bool isVisible = false;
+
+    void Start()
+    {
+        // 시작 시 UI 비활성화
+        uiRootPanel.SetActive(false);
+        iconPanel.SetActive(false);
+    }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
             isVisible = !isVisible;
+
             uiRootPanel.SetActive(isVisible);
+            iconPanel.SetActive(isVisible);
 
             if (isVisible)
             {
-                panelSwitcher.ShowBuildingPanel(); // 기본 탭은 건물 패널
+                panelSwitcher.ShowBuildingPanel();
             }
         }
     }

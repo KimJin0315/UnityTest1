@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: Enbony House
   m_EditorClassIdentifier: 
   buildingName: Enbony House
+  icon: {fileID: -2869476095536097306, guid: 93cae14106dee114b8d0d27808b5375a, type: 3}
+  prefab: {fileID: 4506874536743057727, guid: 85a8a813679da68478ebb2a18b41b476, type: 3}
+  previewPrefab: {fileID: 4506874536743057727, guid: 46129769b9dcd074899820de28ade64d,
+    type: 3}
   width: 8
   height: 8
   resourceCosts:
   - resourceName: Enbony
     amount: 40
-  prefab: {fileID: 4506874536743057727, guid: 85a8a813679da68478ebb2a18b41b476, type: 3}
-  previewPrefab: {fileID: 4506874536743057727, guid: 46129769b9dcd074899820de28ade64d,
-    type: 3}
-  nextUnlock: {fileID: 11400000, guid: 7b1d96181c28eb245a307cd936f13945, type: 2}
-  icon: {fileID: -2869476095536097306, guid: 93cae14106dee114b8d0d27808b5375a, type: 3}
+  unlockType: 3
+  nextUnlocks:
+  - {fileID: 11400000, guid: 7b1d96181c28eb245a307cd936f13945, type: 2}

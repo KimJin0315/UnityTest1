@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: Bamboo House
   m_EditorClassIdentifier: 
   buildingName: Bamboo House
+  icon: {fileID: 7725415702801208186, guid: 988119bf7f6b47e4691a958a11ac2086, type: 3}
+  prefab: {fileID: 819019779479043176, guid: 78426564cd6d82c41ab9d07e8b03ad7a, type: 3}
+  previewPrefab: {fileID: 819019779479043176, guid: e29cc03cbb7e438409b08a6885076849,
+    type: 3}
   width: 8
   height: 8
   resourceCosts:
   - resourceName: Bamboo
     amount: 40
-  prefab: {fileID: 819019779479043176, guid: 78426564cd6d82c41ab9d07e8b03ad7a, type: 3}
-  previewPrefab: {fileID: 819019779479043176, guid: e29cc03cbb7e438409b08a6885076849,
-    type: 3}
-  nextUnlock: {fileID: 11400000, guid: f1063688c78d8fa45909fa7717fec359, type: 2}
-  icon: {fileID: 7725415702801208186, guid: 988119bf7f6b47e4691a958a11ac2086, type: 3}
+  unlockType: 2
+  nextUnlocks:
+  - {fileID: 11400000, guid: f1063688c78d8fa45909fa7717fec359, type: 2}

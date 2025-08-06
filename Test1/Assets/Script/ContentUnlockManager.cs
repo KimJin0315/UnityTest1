@@ -3,34 +3,98 @@
 public class ContentUnlockManager : MonoBehaviour
 {
     public GameObject fishingIcon;
-    public GameObject farmingIcon;
+    public GameObject farmIcon;
     public GameObject miningIcon;
 
-    public GameObject craftingPanel; // 제작대/화로/배 있는 탭
+    public GameObject craftingPanel;
+    public CraftingUIManager craftingUIManager;
 
-    public void EnableCraftingTab(string tabName)
+    public void OnBuildingPlaced(BuildingData data)
     {
-        // 탭 이름 기반으로 활성화
-        Transform tab = craftingPanel.transform.Find(tabName);
-        if (tab != null)
+        Debug.Log($"[해금 시스템] {data.buildingName} 설치됨 → 해금 처리 시작");
+
+        // 다음 해금 대상이 있을 경우
+        if (data.nextUnlocks != null && data.nextUnlocks.Length > 0)
         {
-            tab.gameObject.SetActive(true);
-            Debug.Log($"🔓 제작 탭 해금: {tabName}");
+            foreach (BuildingData unlock in data.nextUnlocks)
+            {
+                craftingUIManager.UnlockBuilding(unlock);
+            }
+        }
+
+        // 아이콘 해금 처리
+        switch (data.buildingName)
+        {
+            case "Wooden House":
+                if (fishingIcon != null)
+                    fishingIcon.SetActive(true);
+                break;
+            case "Bamboo House":
+                if (farmIcon != null)
+                    farmIcon.SetActive(true);
+                break;
+            case "Enbony House":
+                if (miningIcon != null)
+                    miningIcon.SetActive(true);
+                break;
         }
     }
 
-    public void ShowFishingIcon()
+    public void UnlockContent(UnlockType type, string buildingName)
     {
-        if (fishingIcon != null) fishingIcon.SetActive(true);
+        switch (type)
+        {
+            case UnlockType.Fishing:
+                if (fishingIcon != null) fishingIcon.SetActive(true);
+                Debug.Log("🎣 낚시 아이콘 해금됨");
+                break;
+
+            case UnlockType.Farming:
+                if (farmIcon != null) farmIcon.SetActive(true);
+                Debug.Log("🌾 농사 아이콘 해금됨");
+                break;
+
+            case UnlockType.Mining:
+                if (miningIcon != null) miningIcon.SetActive(true);
+                Debug.Log("⛏️ 채광 아이콘 해금됨");
+                break;
+
+            case UnlockType.CraftingTable:
+            case UnlockType.Furnace:
+            case UnlockType.Boat:
+                EnableCraftingTab(type.ToString(), buildingName);
+                break;
+        }
     }
 
-    public void ShowFarmingIcon()
+    private void EnableCraftingTab(string tabName, string buildingName)
     {
-        if (farmingIcon != null) farmingIcon.SetActive(true);
-    }
+        if (craftingPanel == null)
+        {
+            Debug.LogWarning("❗ craftingPanel이 연결되지 않았습니다.");
+            return;
+        }
 
-    public void ShowMiningIcon()
-    {
-        if (miningIcon != null) miningIcon.SetActive(true);
+        Transform tabButtons = craftingPanel.transform.Find("TabButtons");
+        if (tabButtons == null)
+        {
+            Debug.LogWarning("❗ TabButtons를 찾을 수 없습니다.");
+            return;
+        }
+
+        foreach (Transform tab in tabButtons)
+        {
+            if (tab.name.Contains(tabName))
+            {
+                tab.gameObject.SetActive(true);
+                Debug.Log($"✅ {tabName} 탭 해금됨!");
+                break;
+            }
+        }
+
+        if (craftingUIManager != null)
+        {
+            craftingUIManager.UnlockCraftingButton(buildingName);
+        }
     }
 }

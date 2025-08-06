@@ -5,93 +5,76 @@ public class BuildingPlacer : MonoBehaviour
     public Camera mainCamera;
     public Material previewMaterial;
     public float gridSize = 1f;
-    public LayerMask buildingLayer;   // ✅ 실제 건물 전용 레이어 (겹침 체크)
+    public LayerMask buildingLayer;
 
     private GameObject previewObject;
     private BuildingData currentBuilding;
     private bool isPlacing = false;
-    private bool isFlipped = false;   // ✅ 좌우 반전 상태 저장
+    private bool isFlipped = false;
 
     void Update()
     {
-        if (isPlacing && previewObject != null)
+        if (!isPlacing || previewObject == null) return;
+
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = 10;
+        Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);
+        worldPos.z = 0;
+
+        // 격자 스냅
+        worldPos.x = Mathf.Round(worldPos.x / gridSize) * gridSize;
+        worldPos.y = Mathf.Round(worldPos.y / gridSize) * gridSize;
+        previewObject.transform.position = worldPos;
+
+        // 좌우 반전
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            // ✅ 마우스 → 월드 좌표 변환
-            Vector3 mousePos = Input.mousePosition;
-            mousePos.z = 10;
-            Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);
-            worldPos.z = 0;
+            isFlipped = !isFlipped;
+            Vector3 scale = previewObject.transform.localScale;
+            scale.x *= -1;
+            previewObject.transform.localScale = scale;
+        }
 
-            // ✅ 격자 스냅
-            worldPos.x = Mathf.Round(worldPos.x / gridSize) * gridSize;
-            worldPos.y = Mathf.Round(worldPos.y / gridSize) * gridSize;
+        // 충돌 체크
+        Vector2 checkSize = Vector2.one;
+        if (previewObject.TryGetComponent<BoxCollider2D>(out BoxCollider2D box))
+        {
+            checkSize = Vector2.Scale(box.size, previewObject.transform.localScale);
+        }
 
-            previewObject.transform.position = worldPos;
+        Collider2D hit = Physics2D.OverlapBox(worldPos, checkSize, 0f, buildingLayer.value);
+        bool canPlace = (hit == null);
 
-            // ✅ ✅ ✅ 🔥 R 키로 좌우 반전
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                isFlipped = !isFlipped;
-                Vector3 scale = previewObject.transform.localScale;
-                scale.x *= -1;
-                previewObject.transform.localScale = scale;
-            }
+        // 프리뷰 색상
+        Color previewColor = canPlace ? new Color(0, 1, 0, 0.5f) : new Color(1, 0, 0, 0.5f);
+        SetPreviewColor(previewObject, previewColor);
 
-            // ✅ Collider 크기 체크 (SpriteRenderer + Scale 반영)
-            Vector2 checkSize = Vector2.one;
-            if (previewObject.TryGetComponent<BoxCollider2D>(out BoxCollider2D box))
-            {
-                checkSize = Vector2.Scale(box.size, previewObject.transform.localScale);
-            }
+        // 마우스 클릭 처리
+        if (Input.GetMouseButtonDown(0) && canPlace)
+        {
+            PlaceBuilding(worldPos);
+        }
+        else if (Input.GetMouseButtonDown(0) && !canPlace)
+        {
+            Debug.LogWarning("🚫 겹쳐서 건물 설치 불가!");
+        }
 
-            // ✅ OverlapBox로 충돌 체크
-            Collider2D hit = Physics2D.OverlapBox(
-                worldPos,
-                checkSize,
-                0f,
-                buildingLayer.value
-            );
-
-            bool canPlace = (hit == null);
-
-            // ✅ 프리뷰 색상 (초록=설치 가능, 빨강=설치 불가)
-            Color previewColor = canPlace ? new Color(0, 1, 0, 0.5f) : new Color(1, 0, 0, 0.5f);
-            SetPreviewColor(previewObject, previewColor);
-
-            // ✅ 좌클릭 → 설치
-            if (Input.GetMouseButtonDown(0) && canPlace)
-            {
-                PlaceBuilding(worldPos);
-            }
-            else if (Input.GetMouseButtonDown(0) && !canPlace)
-            {
-                Debug.LogWarning("🚫 겹쳐서 건물 설치 불가!");
-            }
-
-            // ✅ 우클릭 → 취소
-            if (Input.GetMouseButtonDown(1))
-            {
-                CancelPlacement();
-            }
+        if (Input.GetMouseButtonDown(1))
+        {
+            CancelPlacement();
         }
     }
 
-    // ✅ 건설 모드 시작
     public void StartPlacement(BuildingData building)
     {
-        // ✅ 기존 프리뷰가 있다면 먼저 삭제
-        if (previewObject != null)
-        {
-            Destroy(previewObject);
-        }
+        if (previewObject != null) Destroy(previewObject);
 
         currentBuilding = building;
         isPlacing = true;
 
-        previewObject = Instantiate(building.prefab);
-        previewObject.layer = LayerMask.NameToLayer("Ignore Raycast"); // ✅ 프리뷰는 충돌 무시
+        previewObject = Instantiate(building.previewPrefab);
+        previewObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-        // ✅ 프리뷰는 Collider 비활성화 (플레이어 안 밀리게)
         foreach (Collider2D col in previewObject.GetComponentsInChildren<Collider2D>())
         {
             col.isTrigger = true;
@@ -101,80 +84,67 @@ public class BuildingPlacer : MonoBehaviour
         SetPreviewMode(previewObject);
     }
 
-    // ✅ 실제 건물 설치
     void PlaceBuilding(Vector3 position)
     {
         PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
 
-        // ✅ 1) 설치 전 재료 체크
         foreach (ResourceCost cost in currentBuilding.resourceCosts)
         {
             if (!inventory.HasResource(cost.resourceName, cost.amount))
             {
                 Debug.LogWarning($"🚫 {cost.resourceName} 부족! 건물을 설치할 수 없습니다.");
-                return;  // ❌ 재료 부족 → 설치 중단
+                return;
             }
         }
 
-        // ✅ 2) 재료 소모
         foreach (ResourceCost cost in currentBuilding.resourceCosts)
         {
             inventory.UseResource(cost.resourceName, cost.amount);
-            Debug.Log($"{cost.resourceName} -{cost.amount} (남은 수량: {inventory.GetResourceAmount(cost.resourceName)})");
+            Debug.Log($"{cost.resourceName} -{cost.amount} (남음: {inventory.GetResourceAmount(cost.resourceName)})");
         }
 
-        // ✅ 3) 건물 설치
         GameObject newBuilding = Instantiate(currentBuilding.prefab, position, Quaternion.identity);
-
-        // ✅ ✅ ✅ ★ 여기서 프리뷰 Scale 그대로 적용
         newBuilding.transform.localScale = previewObject.transform.localScale;
 
-        // ✅ Collider 원상 복구
         foreach (Collider2D col in newBuilding.GetComponentsInChildren<Collider2D>())
         {
             col.isTrigger = false;
         }
 
-        // ✅ Building 레이어 적용
         newBuilding.layer = LayerMask.NameToLayer("Building");
 
-        // ✅ 다음 건물 해금
-        if (currentBuilding.nextUnlock != null)
+        // 해금: 다음 건물들
+        if (currentBuilding.nextUnlocks != null && currentBuilding.nextUnlocks.Length > 0)
         {
-            FindFirstObjectByType<BuildingUIManager>().UnlockBuilding(currentBuilding.nextUnlock);
+            var uiManager = FindFirstObjectByType<BuildingUIManager>();
+            if (uiManager != null)
+            {
+                foreach (var unlock in currentBuilding.nextUnlocks)
+                {
+                    uiManager.UnlockBuilding(unlock);
+                }
+            }
+        }
+
+        // 콘텐츠 해금 (아이콘, 탭 등)
+        var unlockManager = FindFirstObjectByType<ContentUnlockManager>();
+        if (unlockManager != null)
+        {
+            unlockManager.UnlockContent(currentBuilding.unlockType, currentBuilding.buildingName);
         }
 
         CancelPlacement();
-
-        switch (currentBuilding.unlockType)
-        {
-            case UnlockType.CraftingTable:
-                FindFirstObjectByType<ContentUnlockManager>().EnableCraftingTab("CraftingTable");
-                break;
-            case UnlockType.Furnace:
-                FindFirstObjectByType<ContentUnlockManager>().EnableCraftingTab("Furnace");
-                break;
-            case UnlockType.Ship:
-                FindFirstObjectByType<ContentUnlockManager>().EnableCraftingTab("Ship");
-                break;
-            case UnlockType.Fishing:
-                UnityEngine.Debug.Log("🎣 낚시 콘텐츠 해금!");
-                FindFirstObjectByType<ContentUnlockManager>().ShowFishingIcon();
-                break;
-            case UnlockType.Farming:
-                FindFirstObjectByType<ContentUnlockManager>().ShowFarmingIcon();
-                break;
-            case UnlockType.Mining:
-                FindFirstObjectByType<ContentUnlockManager>().ShowMiningIcon();
-                break;
-        }
-
-
-
     }
 
+    void CancelPlacement()
+    {
+        if (previewObject != null) Destroy(previewObject);
+        previewObject = null;
+        isPlacing = false;
+        currentBuilding = null;
+        isFlipped = false;
+    }
 
-    // ✅ 프리뷰 모드 설정 (투명 머티리얼)
     void SetPreviewMode(GameObject obj)
     {
         foreach (Renderer rend in obj.GetComponentsInChildren<Renderer>())
@@ -183,7 +153,6 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    // ✅ 프리뷰 색상
     void SetPreviewColor(GameObject obj, Color color)
     {
         foreach (SpriteRenderer sr in obj.GetComponentsInChildren<SpriteRenderer>())
@@ -192,17 +161,6 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    // ✅ 설치 취소 (프리뷰 삭제)
-    void CancelPlacement()
-    {
-        Destroy(previewObject);
-        previewObject = null;
-        isPlacing = false;
-        currentBuilding = null;
-        isFlipped = false;
-    }
-
-    // ✅ 건물 크기 조정 (width/height 기반)
     void AdjustSize(GameObject obj, int width, int height)
     {
         SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
@@ -217,7 +175,7 @@ public class BuildingPlacer : MonoBehaviour
             BoxCollider2D box = obj.GetComponent<BoxCollider2D>();
             if (box != null)
             {
-                box.size = spriteSize; // scale과 합쳐져서 최종 크기 결정됨
+                box.size = spriteSize;
             }
         }
     }

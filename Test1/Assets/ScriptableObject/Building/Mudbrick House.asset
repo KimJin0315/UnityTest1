@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Mudbrick House
   m_EditorClassIdentifier: 
   buildingName: Mudbrick House
+  icon: {fileID: -555203081499698785, guid: 90b22f1ffe496e84b8b3cc09549390ac, type: 3}
+  prefab: {fileID: 6798949513796669790, guid: 1ff909dc5df63e74786450db61f21717, type: 3}
+  previewPrefab: {fileID: 6798949513796669790, guid: fba391fb52700954a9ba56f0696c902b,
+    type: 3}
   width: 10
   height: 10
   resourceCosts:
@@ -20,8 +24,6 @@ MonoBehaviour:
     amount: 40
   - resourceName: Cement
     amount: 10
-  prefab: {fileID: 6798949513796669790, guid: 1ff909dc5df63e74786450db61f21717, type: 3}
-  previewPrefab: {fileID: 6798949513796669790, guid: fba391fb52700954a9ba56f0696c902b,
-    type: 3}
-  nextUnlock: {fileID: 11400000, guid: 330ef152b6492474da8fa167c7989014, type: 2}
-  icon: {fileID: -555203081499698785, guid: 90b22f1ffe496e84b8b3cc09549390ac, type: 3}
+  unlockType: 5
+  nextUnlocks:
+  - {fileID: 11400000, guid: 330ef152b6492474da8fa167c7989014, type: 2}

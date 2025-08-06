@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Wooden House
   m_EditorClassIdentifier: 
   buildingName: Wooden House
+  icon: {fileID: 7085867596842554298, guid: e38977f36d9d9c442ae6c449e7785df4, type: 3}
+  prefab: {fileID: 7732151517503980863, guid: 0bec9f21c551bf44faa2e0afe76088c2, type: 3}
+  previewPrefab: {fileID: 7732151517503980863, guid: a3df749be380972419b3173433483ee1,
+    type: 3}
   width: 6
   height: 6
   resourceCosts:
@@ -20,8 +24,6 @@ MonoBehaviour:
     amount: 30
   - resourceName: Branch
     amount: 20
-  prefab: {fileID: 7732151517503980863, guid: 0bec9f21c551bf44faa2e0afe76088c2, type: 3}
-  previewPrefab: {fileID: 7732151517503980863, guid: a3df749be380972419b3173433483ee1,
-    type: 3}
-  nextUnlock: {fileID: 11400000, guid: b603bc6633995da4a946feb44f2d050b, type: 2}
-  icon: {fileID: 7085867596842554298, guid: e38977f36d9d9c442ae6c449e7785df4, type: 3}
+  unlockType: 1
+  nextUnlocks:
+  - {fileID: 11400000, guid: b603bc6633995da4a946feb44f2d050b, type: 2}

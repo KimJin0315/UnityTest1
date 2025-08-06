@@ -14,7 +14,7 @@ public class ResourcePickup : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, player.transform.position);
 
-        if (distance <= pickupRange)  // ✅ 플레이어가 일정 거리 안에 있을 때만
+        if (distance <= pickupRange)  // 플레이어가 일정 거리 안에 있을 때만
         {
             PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
 
@@ -22,7 +22,6 @@ public class ResourcePickup : MonoBehaviour
             {
                 inventory.AddResource(resourceName, amount);
                 Debug.Log($"{resourceName} {amount}개 획득!");
-                // Destroy(gameObject);   ✅ 테스트니까 주석 처리 (삭제 안 함)
             }
         }
         else
