@@ -11,7 +11,7 @@ public class CraftingUIManager : MonoBehaviour
     [Header("Buildings")]
     public BuildingData[] craftingBuildings;
 
-    private Dictionary<BuildingData, bool> unlocked = new Dictionary<BuildingData, bool>();
+    private Dictionary<BuildingData, GameObject> buttonMap = new Dictionary<BuildingData, GameObject>();
 
     void Start()
     {
@@ -28,28 +28,22 @@ public class CraftingUIManager : MonoBehaviour
                 FindFirstObjectByType<BuildingPlacer>().StartPlacement(data);
             });
 
-            btn.interactable = false;
+            btn.interactable = data.isDefaultUnlocked; // 기본 해금 여부 설정
 
             CraftingButton cb = btnObj.AddComponent<CraftingButton>();
             cb.buildingData = data;
 
-            unlocked[data] = false;
-        }
-
-        if (craftingBuildings.Length > 0)
-        {
-            UnlockBuilding(craftingBuildings[0]);
+            buttonMap[data] = btnObj;
         }
     }
 
     public void UnlockCraftingButton(string buildingName)
     {
-        foreach (Transform child in craftingGridParent)
+        foreach (var pair in buttonMap)
         {
-            CraftingButton cb = child.GetComponent<CraftingButton>();
-            if (cb != null && cb.buildingData != null && cb.buildingData.buildingName == buildingName)
+            if (pair.Key.buildingName == buildingName)
             {
-                child.GetComponent<Button>().interactable = true;
+                pair.Value.GetComponent<Button>().interactable = true;
                 Debug.Log($"🔓 {buildingName} 버튼 해금 완료!");
                 break;
             }
@@ -58,29 +52,40 @@ public class CraftingUIManager : MonoBehaviour
 
     public void UnlockBuilding(BuildingData data)
     {
-        if (!unlocked.ContainsKey(data))
+        if (!buttonMap.ContainsKey(data))
         {
             Debug.LogWarning($"⚠️ 알 수 없는 건물 데이터: {data.buildingName}");
             return;
         }
 
-        if (unlocked[data])
+        Button btn = buttonMap[data].GetComponent<Button>();
+        if (!btn.interactable)
+        {
+            btn.interactable = true;
+            Debug.Log($"🔓 {data.buildingName} 해금 완료!");
+        }
+        else
         {
             Debug.Log($"ℹ️ 이미 해금됨: {data.buildingName}");
-            return;
         }
+    }
 
-        unlocked[data] = true;
-
+    public void UnlockCraftingBuilding(BuildingData building)
+    {
         foreach (Transform child in craftingGridParent)
         {
             CraftingButton cb = child.GetComponent<CraftingButton>();
-            if (cb != null && cb.buildingData == data)
+            if (cb != null && cb.buildingData == building)
             {
-                child.GetComponent<Button>().interactable = true;
-                Debug.Log($"🔓 {data.buildingName} 해금 완료!");
+                Button btn = cb.GetComponent<Button>();
+                if (btn != null)
+                {
+                    btn.interactable = true;
+                    Debug.Log($"🔨 제작 건물 해금: {building.buildingName}");
+                }
                 break;
             }
         }
     }
+
 }

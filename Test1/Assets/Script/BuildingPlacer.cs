@@ -88,6 +88,7 @@ public class BuildingPlacer : MonoBehaviour
     {
         PlayerInventory inventory = FindFirstObjectByType<PlayerInventory>();
 
+        // 설치 전 재료 체크
         foreach (ResourceCost cost in currentBuilding.resourceCosts)
         {
             if (!inventory.HasResource(cost.resourceName, cost.amount))
@@ -97,12 +98,14 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
 
+        // 재료 소모
         foreach (ResourceCost cost in currentBuilding.resourceCosts)
         {
             inventory.UseResource(cost.resourceName, cost.amount);
-            Debug.Log($"{cost.resourceName} -{cost.amount} (남음: {inventory.GetResourceAmount(cost.resourceName)})");
+            Debug.Log($"{cost.resourceName} -{cost.amount} (남은 수량: {inventory.GetResourceAmount(cost.resourceName)})");
         }
 
+        // 건물 설치
         GameObject newBuilding = Instantiate(currentBuilding.prefab, position, Quaternion.identity);
         newBuilding.transform.localScale = previewObject.transform.localScale;
 
@@ -113,28 +116,20 @@ public class BuildingPlacer : MonoBehaviour
 
         newBuilding.layer = LayerMask.NameToLayer("Building");
 
-        // 해금: 다음 건물들
-        if (currentBuilding.nextUnlocks != null && currentBuilding.nextUnlocks.Length > 0)
-        {
-            var uiManager = FindFirstObjectByType<BuildingUIManager>();
-            if (uiManager != null)
-            {
-                foreach (var unlock in currentBuilding.nextUnlocks)
-                {
-                    uiManager.UnlockBuilding(unlock);
-                }
-            }
-        }
-
-        // 콘텐츠 해금 (아이콘, 탭 등)
+        // 건물 해금 처리
         var unlockManager = FindFirstObjectByType<ContentUnlockManager>();
         if (unlockManager != null)
         {
-            unlockManager.UnlockContent(currentBuilding.unlockType, currentBuilding.buildingName);
+            unlockManager.OnBuildingPlaced(currentBuilding);
+        }
+        else
+        {
+            Debug.LogWarning("❗ ContentUnlockManager를 찾을 수 없습니다.");
         }
 
         CancelPlacement();
     }
+
 
     void CancelPlacement()
     {

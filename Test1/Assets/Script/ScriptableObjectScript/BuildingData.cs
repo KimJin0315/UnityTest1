@@ -33,5 +33,8 @@ public class BuildingData : ScriptableObject
 
     public UnlockType unlockType;              // 콘텐츠 해금용 (ex: 낚시, 농사)
     public BuildingData[] nextUnlocks;         // 설치 시 해금될 건물들
+
+    public bool isDefaultUnlocked = false; // 게임 시작 시 자동 해금 여부
+
 }
 

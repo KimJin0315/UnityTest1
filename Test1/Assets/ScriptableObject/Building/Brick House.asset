@@ -25,4 +25,6 @@ MonoBehaviour:
   - resourceName: Cement
     amount: 10
   unlockType: 6
-  nextUnlocks: []
+  nextUnlocks:
+  - {fileID: 11400000, guid: 4fc1785ee46cf7c4e991b2261081f1b4, type: 2}
+  isDefaultUnlocked: 0

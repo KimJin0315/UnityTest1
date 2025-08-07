@@ -27,3 +27,5 @@ MonoBehaviour:
   unlockType: 1
   nextUnlocks:
   - {fileID: 11400000, guid: b603bc6633995da4a946feb44f2d050b, type: 2}
+  - {fileID: 11400000, guid: b603bc6633995da4a946feb44f2d050b, type: 2}
+  isDefaultUnlocked: 0
