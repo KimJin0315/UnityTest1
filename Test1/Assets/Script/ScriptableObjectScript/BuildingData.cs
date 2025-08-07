@@ -7,9 +7,9 @@ public enum UnlockType
     Fishing,        // 낚시 아이콘 해금
     Farming,        // 농사 아이콘 해금
     Mining,         // 채광 아이콘 해금
-    CraftingTable,  // 제작대 탭 해금
-    Furnace,        // 화로 탭 해금
-    Boat            // 배 탭 해금
+    CraftingTable,  // 제작대  해금
+    Furnace,        // 화로  해금
+    Boat            // 배  해금
 }
 
 

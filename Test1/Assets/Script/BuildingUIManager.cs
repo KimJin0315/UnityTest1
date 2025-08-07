@@ -28,10 +28,8 @@ public class BuildingUIManager : MonoBehaviour
             bool isFirst = (data == buildings[0]);
             btn.interactable = isFirst;
 
-            // ✅ BuildingButton 붙이기
             btnObj.AddComponent<BuildingButton>().buildingData = data;
 
-            // ✅ 해금 여부 초기화
             unlocked[data] = isFirst;
         }
     }
@@ -54,7 +52,6 @@ public class BuildingUIManager : MonoBehaviour
     }
 }
 
-// ✅ UI 버튼에 붙어서 어떤 건물 버튼인지 알려주는 단순 클래스
 public class BuildingButton : MonoBehaviour
 {
     public BuildingData buildingData;

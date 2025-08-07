@@ -44,7 +44,6 @@ namespace Cainos.PixelArtTopDown_Basic
             dir.Normalize();
             animator.SetBool("IsMoving", dir.magnitude > 0);
 
-            // ✅ Rigidbody2D로 이동 처리
             rb.linearVelocity = speed * dir;
         }
     }
